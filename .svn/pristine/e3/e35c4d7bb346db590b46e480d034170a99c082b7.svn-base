@@ -1,0 +1,141 @@
+package mylistpackage;
+
+/**
+ * Represents basic sorted array-based list.
+ * 
+ * @author modified from Building Java Programs 3rd ed. modified by John Chang
+ * @version Oct 14, 2016
+ * @param <E> is of any object type
+ */
+public class ArrayListSorted<E extends Comparable<? super E>> extends AbstractArrayMyList<E> {
+
+
+    /**
+     * Constructs an empty list of default capacity.
+     */
+	@SuppressWarnings("unchecked")
+    public ArrayListSorted() {
+        super();
+        elementData = (E[]) new Comparable[DEFAULT_CAPACITY];
+    }
+
+    /**
+     * Constructs an empty list of the given capacity.
+     * 
+     * @param capacity > 0
+     * @throws IllegalArgumentException if capacity <= 0
+     */
+	@SuppressWarnings("unchecked")
+    public ArrayListSorted(int capacity) {
+    	super();
+    	if (capacity <= 0) {
+            throw new IllegalArgumentException("capacity: " + capacity);
+        }
+    	elementData = (E[]) new Comparable[capacity];
+    
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean contains(E value) {
+    	return binarySearch(value) > -1;
+    }
+
+    
+    /**
+     * {@inheritDoc}
+     * IllegalArgumentException if value is out of place.
+     */
+    @Override
+    public void insert(E value) {
+        super.ensureCapacity(size + 2);
+        if (size > -1){
+        	if(value.compareTo(elementData[size]) < 0) {
+        		throw new IllegalArgumentException();
+        	}
+        }
+        	size++;
+        	elementData[size] = value;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public void clear() {
+    	elementData = (E[]) new Comparable[DEFAULT_CAPACITY];
+        size = -1;
+    }
+
+    /**
+     * @see mylistpackage.MyList#remove(java.lang.Object)
+     */
+    @Override
+    public void remove(E value) {
+        int index = getIndex(value);
+        if (size >= 0 && index >= 0) {
+        	for (int i = index; i < size; i++) {  
+            	elementData[i] = elementData[i + 1];  
+        	}       
+            elementData[size] = null;    
+            size--;
+        }
+        
+        
+    }
+
+
+    /*********************************************
+     * Index list methods follow
+     *********************************************/
+
+    /**
+     * Replaces the value at the given index with the given value.
+     * 
+     * @param index <= size and index >= 0
+     * @value is assigned
+     * @throws IndexOutOfBoundsException if index < 0 or index > size
+     * @throws IllegalArgumetException if value is in the wrong location
+     * {@inheritDoc}
+     */
+    @Override
+    public void set(int index, E value) {	
+        if (index < 0 || index > size) {	
+            throw new IndexOutOfBoundsException();	
+        }								
+        if(index > 1) {
+	        if(value.compareTo(elementData[index - 1]) < 0) {
+	        	throw new IllegalArgumentException();
+	        }
+        }if(index < size) {
+        	if(value.compareTo(elementData[index + 1]) > 0) {
+        		throw new IllegalArgumentException();
+        	}
+        }	
+        elementData[index] = value;		
+    }
+
+    /*********************************************
+     * Index list methods end
+     *********************************************/
+    public int binarySearch(E target) {
+    	int first = 0;
+    	int last = size;
+    	while(last >= first) {
+		    int middle = first + last / 2;
+			int compResult = target.compareTo(elementData[middle]);
+			if(compResult == 0) {
+			    return middle;
+			}else if (compResult > 0) {
+		        first = middle + 1;
+			}else{
+			    last = middle - 1;
+			}
+    	}
+    	return -1;
+	}
+
+}

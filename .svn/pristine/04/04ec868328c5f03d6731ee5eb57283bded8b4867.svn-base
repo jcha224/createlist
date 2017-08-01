@@ -1,0 +1,91 @@
+package mylistpackage;
+
+
+/**
+ * Represents basic unsorted array-based list.
+ * 
+ * @author modified from Building Java Programs 3rd ed.
+ * @version Sep 26, 2016
+ * @param <E> is of any object type
+ */
+public class ArrayListUnsorted<E> extends AbstractArrayMyList<E> {
+
+    /**
+     * index of the last element in the list
+     */
+    private int size;
+
+    /**
+     * Constructs an empty list of default capacity.
+     */
+    public ArrayListUnsorted() {
+        super(DEFAULT_CAPACITY);
+    }
+
+    /**
+     * Constructs an empty list of the given capacity.
+     * 
+     */
+    public ArrayListUnsorted(int capacity) {
+        super(capacity);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void insert(E value) {
+        super.ensureCapacity(size + 2);
+        size++;
+        elementData[size] = value;       
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void clear() {
+    	elementData = (E[]) new Object[DEFAULT_CAPACITY];
+        size = -1;
+    }
+
+    /**
+     * @see mylistpackage.MyList#remove(java.lang.Object)
+     */
+    @Override
+    public void remove(E value) {
+        int index = getIndex(value);
+        if (size >= 0 && index >= 0) {
+            elementData[index] = elementData[size];
+            elementData[size] = null;
+            size--;
+        }
+    }
+
+
+    /*********************************************
+     * Index list methods follow
+     *********************************************/
+
+    /**
+     * Replaces the value at the given index with the given value.
+     * 
+     * @param index <= size and index >= 0
+     * @value is assigned
+     * @throws IndexOutOfBoundsException if index < 0 or index > size
+     * {@inheritDoc}
+     */
+    @Override
+    public void set(int index, E value) {	//
+        if (index < 0 || index > size) {	//
+            throw new IndexOutOfBoundsException();	//
+        }										//
+        elementData[index] = value;		//
+    }
+
+    /*********************************************
+     * Index list methods end
+     *********************************************/
+
+
+}
